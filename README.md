@@ -67,35 +67,32 @@ This allows us to **identify and manipulate concept-specific features** inside t
 
 ### 3. Phase 1 — Identifying Concept-Specific Features
 
-For a target concept **c**, we compare:
+For a target concept $c$, we compare:
 
-- Activations from prompts **with concept c** (`D_c`)
-- Activations from prompts **without concept c** (`D_¬c`)
+- Activations from prompts **with concept $c$** ($D_c$)
+- Activations from prompts **without concept $c$** ($D_{\neg c}$)
 
 We compute a normalized **concept score** per SAE feature:
 
-\[
-\text{score}(i) =
-\frac{\mu(i, D_c)}{\sum_j \mu(j, D_c)}
--
-\frac{\mu(i, D_{\neg c})}{\sum_j \mu(j, D_{\neg c})}
-\]
+$$
+\text{score}(i) = \frac{\mu(i, D_c)}{\sum_j \mu(j, D_c)} - \frac{\mu(i, D_{\neg c})}{\sum_j \mu(j, D_{\neg c})}
+$$
 
 Where:
-- \(\mu(i, D)\) = average activation of feature *i* over dataset *D*
+- $\mu(i, D)$ = average activation of feature $i$ over dataset $D$
 
 **Interpretation**:  
-> High score ⇒ feature is strongly associated with the target concept
+> High score $\Rightarrow$ feature is strongly associated with the target concept
 
 ---
 
 ### 4. Phase 2 — Feature Selection
 
-We keep the **top τ₍c₎ features** while removing:
+We keep the **top $\tau_{(c)}$ features** while removing:
 - **Dead features** (activated < 1%)
 - **Overactive features** (activated > 99%)
 
-This yields a compact feature set \(F_c\) to ablate.
+This yields a compact feature set $F_c$ to ablate.
 
 ---
 
@@ -104,12 +101,12 @@ This yields a compact feature set \(F_c\) to ablate.
 During each denoising step:
 
 1. Encode activations using the SAE  
-2. For features \(i \in F_c\):
+2. For features $i \in F_c$:
    - If activation exceeds its mean:
-     \[
+     $$
      f_i(x) \leftarrow \gamma_c \cdot \mu(i, D_c) \cdot f_i(x)
-     \]
-   - Where \(\gamma_c < 0\) is a **negative multiplier**
+     $$
+   - Where $\gamma_c < 0$ is a **negative multiplier**
 3. Decode activations back into the diffusion model
 
 This **suppresses concept-specific features** while preserving others.
