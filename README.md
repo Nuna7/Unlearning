@@ -103,13 +103,18 @@ During each denoising step:
 1. Encode activations using the SAE  
 2. For features $i \in F_c$:
    - If activation exceeds its mean:
-     $$
-     f_i(x) \leftarrow \gamma_c \cdot \mu(i, D_c) \cdot f_i(x)
-     $$
-   - Where $\gamma_c < 0$ is a **negative multiplier**
+
+$$
+f_i(x) \leftarrow \gamma_c \cdot \mu(i, D_c) \cdot f_i(x)
+$$
+
+Where:
+- $\gamma_c < 0$ is a **negative multiplier**
+
 3. Decode activations back into the diffusion model
 
 This **suppresses concept-specific features** while preserving others.
+
 
 ## Example
 ![Example](example.png)
